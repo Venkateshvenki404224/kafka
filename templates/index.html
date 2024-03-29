@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const socket = io(); // Connects to your Flask-SocketIO server
+
+            socket.on('chat_message', function(data) {
+                // Append received message to the message area
+                const node = document.createElement("div");
+                node.textContent = JSON.stringify(data);
+                document.getElementById("messages").appendChild(node);
+            });
+
+            document.getElementById('sendButton').onclick = () => {
+                const message = document.getElementById('messageInput').value;
+                // You need to modify this to include the ticket/topic with the message
+                socket.emit('send_message', {message: message});
+            };
+        });
+    </script>
+</head>
+<body>
+    <div id="messages"></div>
+    <input type="text" id="messageInput">
+    <button id="sendButton">Send</button>
+</body>
+</html>
